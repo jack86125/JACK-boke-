@@ -44,7 +44,7 @@ export const siteConfig = {
     photos: 0, // 照片墙数量可以手动写死或动态计算
   },
   chatterTitle: "云端杂谈", // 你可以改成任何你喜欢的名字
-  chatterDescription: "代码、学术、提瓦特与泰拉大陆的碎片记录",
+  chatterDescription: "代码、AI、旅游、思考的碎片记录",
 
   // 👇 【新增】：图床核心配置 (PicBed Configuration)
   picBedName: "图床",

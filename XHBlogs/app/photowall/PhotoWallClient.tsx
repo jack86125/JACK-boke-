@@ -51,7 +51,7 @@ export default function PhotoWallClient() {
               <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
                 <div>
                   <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-widest mb-2 transition-colors duration-700">光影画廊</h1>
-                  <p className="text-slate-600 dark:text-slate-400 font-medium tracking-wider transition-colors duration-700">定格时间，封存泰拉与现实的每一次心跳</p>
+                  <p className="text-slate-600 dark:text-slate-400 font-medium tracking-wider transition-colors duration-700">定格时间、岁月，将瞬间的心跳变为永恒！对抗遗忘，留存时光。</p>
                 </div>
 
                 <div className="relative w-full md:w-80 group">

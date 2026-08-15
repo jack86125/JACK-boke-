@@ -150,7 +150,7 @@ export default function FriendsBoard() {
         </div>
         <div className="text-center md:text-left w-full">
           <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-4 tracking-widest drop-shadow-sm uppercase">云端引力</h1>
-          <p className="text-slate-600 dark:text-slate-400 font-serif">那些散落在赛博宇宙各处的有趣灵魂与神经节点。</p>
+          <p className="text-slate-600 dark:text-slate-400 font-serif">那些散落在世界各处的有趣灵魂在此处相会，结交新的朋友。</p>
         </div>
       </div>
 

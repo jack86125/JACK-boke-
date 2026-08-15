@@ -47,7 +47,7 @@ export default function FriendsBoard() {
             云端引力
           </h1>
           <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-serif">
-            那些散落在赛博宇宙各处的有趣灵魂与神经节点。
+            那些散落在世界各处的有趣灵魂在此处相会，结交新的朋友。
           </p>
         </div>
       </div>
