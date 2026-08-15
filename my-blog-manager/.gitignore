@@ -42,3 +42,7 @@ next-env.d.ts
 
 # 本地后端运行时端口文件(每次启动桌面后台都会重写,不提交)
 /public/backend_config.json
+
+# Python 字节码缓存
+__pycache__/
+*.pyc

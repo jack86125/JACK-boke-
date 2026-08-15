@@ -7,6 +7,8 @@ router = APIRouter()
 # 动态定位 Manager 根目录
 CURRENT_API_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_API_DIR, "..", ".."))
+# 🌟 目标博客默认位置 = 仓库根目录下的 XHBlogs(与原「双轨部署」的 blogPath 配置解耦)
+AUTO_BLOG = os.path.abspath(os.path.join(CURRENT_API_DIR, "..", "..", "..", "XHBlogs"))
 
 # 需要镜像覆盖的文件夹 (先清空目标，再全量复制)
 SYNC_DIRS = ["posts", "chatters", "moments"]
@@ -21,23 +23,32 @@ SYNC_FILES = [
 
 
 def is_safe_blog_dir(target_path):
-    """防呆检测：只有包含 package.json 的才被认为是安全的博客目录"""
+    """防呆检测:只有包含 package.json 的才被认为是安全的博客目录"""
     return os.path.exists(os.path.join(target_path, "package.json"))
+
+
+def resolve_blog_path(raw_path):
+    """传入路径为空或不存在时,自动回退到仓库根目录下的 XHBlogs"""
+    path = (raw_path or "").strip()
+    if path and os.path.exists(path):
+        return path
+    return AUTO_BLOG
 
 
 @router.post("/check")
 async def check_blog_path(request: Request):
-    """检测目标路径是否合法且具备基本结构"""
+    """检测目标路径是否合法且具备基本结构(顺带返回实际将使用的路径)"""
     try:
         payload = await request.json()
-        target_path = payload.get("blogPath", "").strip()
+        target_path = resolve_blog_path(payload.get("blogPath", ""))
 
         if not target_path or not os.path.exists(target_path):
-            return {"success": False, "message": "🚫 目标物理路径不存在，请检查输入！"}
+            return {"success": False, "message": "🚫 目标物理路径不存在，请检查输入！", "blogPath": target_path}
 
         if not is_safe_blog_dir(target_path):
             return {"success": False,
-                    "message": "⚠️ 危险！目标路径未检测到 package.json，似乎不是一个有效的前端项目，已拦截操作。"}
+                    "message": "⚠️ 危险！目标路径未检测到 package.json，似乎不是一个有效的前端项目，已拦截操作。",
+                    "blogPath": target_path}
 
         missing = []
         for d in ["posts", "data", "app"]:
@@ -46,11 +57,12 @@ async def check_blog_path(request: Request):
 
         if missing:
             return {"success": True,
-                    "message": f"✅ 路径安全。但目标缺失以下文件夹：{', '.join(missing)}。同步时将自动创建。"}
+                    "message": f"✅ 路径安全。但目标缺失以下文件夹：{', '.join(missing)}。同步时将自动创建。",
+                    "blogPath": target_path}
 
-        return {"success": True, "message": "✅ 路径校验通过，目录结构完美！"}
+        return {"success": True, "message": "✅ 路径校验通过，目录结构完美！", "blogPath": target_path}
     except Exception as e:
-        return {"success": False, "message": f"校验异常: {str(e)}"}
+        return {"success": False, "message": f"校验异常: {str(e)}", "blogPath": ""}
 
 
 @router.post("/execute")
@@ -58,7 +70,7 @@ async def execute_sync(request: Request):
     """执行物理覆盖同步"""
     try:
         payload = await request.json()
-        target_path = payload.get("blogPath", "").strip()
+        target_path = resolve_blog_path(payload.get("blogPath", ""))
 
         if not is_safe_blog_dir(target_path):
             return {"success": False, "message": "安全拦截：目标路径不合法！"}

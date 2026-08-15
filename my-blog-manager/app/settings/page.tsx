@@ -12,7 +12,6 @@ import ProfileSection from '../../components/settings/ProfileSection';
 import BackgroundSection from '../../components/settings/BackgroundSection';
 import MusicSection from '../../components/settings/MusicSection';
 import GallerySection from '../../components/settings/GallerySection';
-import RepoSection from '../../components/settings/RepoSection';
 import DisplaySection from '../../components/settings/DisplaySection';
 import CommentSection from '../../components/settings/CommentSection';
 import DanmakuSection from '../../components/settings/DanmakuSection';
@@ -199,7 +198,6 @@ function SettingsContent() {
     { id: 'danmaku', name: '全站弹幕设置', icon: '⚡' },
     { id: 'comment', name: '评论系统配置', icon: '💬' },
     { id: 'aicat', name: 'AI 煤球配置', icon: '🐾' }, // 👈 新增的小猫设置
-    { id: 'repo', name: '项目仓库设置', icon: '🚀' },
   ];
 
   return (
@@ -234,8 +232,6 @@ function SettingsContent() {
               {activeTab === 'comment' && <CommentSection key="comment" formData={formData} handleUpdate={handleUpdate} pushToQueue={pushToQueue} />}
               {/* 👇 🌟 挂载 AI 猫咪面板 */}
               {activeTab === 'aicat' && <AICatSection key="aicat" formData={formData} handleUpdate={handleUpdate} pushToQueue={pushToQueue} />}
-
-              {activeTab === 'repo' && <RepoSection key="repo" />}
             </AnimatePresence>
           </div>
 

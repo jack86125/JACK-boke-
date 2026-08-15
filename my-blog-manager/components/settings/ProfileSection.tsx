@@ -4,15 +4,22 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 // 🌟 引入你的图床工具组件 (请根据你实际的文件夹层级调整相对路径)
 import FloatingImageTool from '../editor/FloatingImageTool';
+import { useToast } from '../ToastProvider';
+import { CloudUpload } from 'lucide-react';
 
 export default function ProfileSection({ formData, handleUpdate, pushToQueue }: any) {
   // 🌟 终极防崩溃兜底
   const safeData = formData || {};
   const safeSocial = safeData.social || {};
+  const { showToast } = useToast();
 
   // 🌟 控制图床工具的状态
   const [isImageToolOpen, setIsImageToolOpen] = useState(false);
   const [targetImageField, setTargetImageField] = useState<'avatarUrl' | 'faviconUrl' | null>(null);
+
+  // 🌟 一键推送 GitHub 状态
+  const [isPushing, setIsPushing] = useState(false);
+  const [pushResult, setPushResult] = useState<{ ok: boolean; message: string; detail?: string } | null>(null);
 
   // 打开图床工具，并记录是哪个输入框在请求图片
   const openImageTool = (field: 'avatarUrl' | 'faviconUrl') => {
@@ -40,6 +47,25 @@ export default function ProfileSection({ formData, handleUpdate, pushToQueue }: 
   // 🌟🌟🌟 核心破局点：化繁为简！
   const handleSaveAll = () => {
     pushToQueue('全量更新个人名片');
+  };
+
+  // 🌟 一键推送 GitHub：git add → commit → push 全部由后端引擎完成
+  const handlePushGithub = async () => {
+    if (isPushing) return;
+    setIsPushing(true);
+    setPushResult(null);
+    try {
+      const configRes = await fetch(`/backend_config.json?t=${Date.now()}`);
+      const config = await configRes.json();
+      const res = await fetch(`http://127.0.0.1:${config.api_port}/api/git/push`, { method: 'POST' });
+      const data = await res.json();
+      setPushResult({ ok: !!data.success, message: data.message, detail: data.detail });
+      showToast(data.message, data.success ? "success" : "error");
+    } catch (e: any) {
+      setPushResult({ ok: false, message: "无法连接到 Python 桌面核心引擎" });
+      showToast("无法连接到引擎", "error");
+    }
+    setIsPushing(false);
   };
 
   return (
@@ -160,6 +186,41 @@ export default function ProfileSection({ formData, handleUpdate, pushToQueue }: 
             <button onClick={handleSaveAll} className="px-10 py-3 bg-indigo-500 text-white rounded-2xl text-sm font-black shadow-xl hover:bg-indigo-600 transition-all active:scale-95 w-full md:w-auto">
               暂存修改至操作队列
             </button>
+
+            {/* 🌟 一键推送 GitHub:本地全部改动 → 提交 → 推送,触发 Vercel 自动上线 */}
+            <div className="pt-6 border-t border-slate-200 dark:border-slate-700/50">
+              <h3 className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2 mb-3">
+                🚀 部署发布
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                一键把本地所有改动提交并推送到 GitHub 仓库,已绑定 Vercel 时线上会自动更新(约 1~3 分钟)。
+                <br />推送前请先在右上角完成「更新本地」和「同步 Blog」。
+              </p>
+              <button
+                onClick={handlePushGithub}
+                disabled={isPushing}
+                className={`w-full py-4 rounded-2xl text-sm font-black shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 ${
+                  isPushing
+                    ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-300 cursor-wait'
+                    : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-emerald-500/30'
+                }`}
+              >
+                <CloudUpload size={18} className={isPushing ? 'animate-pulse' : ''} />
+                {isPushing ? '正在推送中,请稍候...' : '推送 GitHub'}
+              </button>
+              {pushResult && (
+                <div className={`mt-3 p-3 rounded-xl text-[11px] leading-relaxed break-all ${
+                  pushResult.ok
+                    ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-300'
+                }`}>
+                  {pushResult.message}
+                  {pushResult.detail && (
+                    <pre className="mt-2 text-[10px] opacity-80 whitespace-pre-wrap font-mono max-h-32 overflow-y-auto">{pushResult.detail}</pre>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </motion.section>

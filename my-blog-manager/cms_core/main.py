@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # 引入所有 API 路由
 from cms_core.api import music, config, picbed, drafts, moments
 from cms_core.api import gallery, friends, projects
-from cms_core.api import sync, deploy
+from cms_core.api import sync, git
 
 app = FastAPI(title="XingHuiSama CMS Backend", version="1.0.0")
 
@@ -31,4 +31,4 @@ app.include_router(friends.router, prefix="/api/friends", tags=["Friends"])
 app.include_router(projects.router, prefix="/api/projects", tags=["Projects"])
 app.include_router(moments.router, prefix="/api/moments", tags=["Moments"])
 app.include_router(sync.router, prefix="/api/sync", tags=["Sync"])
-app.include_router(deploy.router, prefix="/api/deploy", tags=["Deploy"])
+app.include_router(git.router, prefix="/api/git", tags=["Git"])

@@ -21,22 +21,23 @@ export default function Navbar() {
   const { operations, removeOperation, clearOperations } = useOperations();
   const { showToast } = useToast();
 
+  // 🌟 目标博客路径由后端自动解析(仓库根目录下的 XHBlogs),不再依赖 deploy_config
   useEffect(() => {
     const fetchPath = async () => {
       try {
         const configRes = await fetch(`/backend_config.json?t=${Date.now()}`);
         const config = await configRes.json();
-        const res = await fetch(`http://127.0.0.1:${config.api_port}/api/deploy/config`);
+        const res = await fetch(`http://127.0.0.1:${config.api_port}/api/sync/check`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ blogPath: "" })
+        });
         if (res.ok) {
           const data = await res.json();
-          if (data.blogPath) {
-            setTargetBlogPath(data.blogPath);
-            localStorage.setItem('targetBlogPath', data.blogPath);
-          }
+          if (data.blogPath) setTargetBlogPath(data.blogPath);
         }
       } catch (e) {
-        const path = localStorage.getItem('targetBlogPath') || "F:/Projects/my-blog";
-        setTargetBlogPath(path);
+        setTargetBlogPath("后端引擎未连接");
       }
     };
     fetchPath();
@@ -157,10 +158,6 @@ export default function Navbar() {
     };
 
   const handleSyncBlogClick = () => {
-    if (!targetBlogPath) {
-       const fallback = localStorage.getItem('targetBlogPath') || "F:/Projects/my-blog";
-       setTargetBlogPath(fallback);
-    }
     setIsOpBoxOpen(false);
     setSyncModalOpen(true);
   };
