@@ -2,12 +2,12 @@
 
 export const siteConfig = {
   // 1. 网站标题与博主信息
-  title: "XingHuiSama の 宝藏之地",
+  title: "Jack の 宝藏之地",
   faviconUrl: "/avatar.jpg",
-  authorName: "XingHuiSama",
-  bio: "在代码、学术与分子动力学模拟间穿梭的普通人。近期正埋头于 GROMACS 模拟研究与神经网络计算。",
+  authorName: "JACK",
+  bio: "在编程、AI、Agent开发、旅游等领域深耕的男大.最近处于找实习和Vibe coding中",
 
-  navTitle: "XingHuiSama",
+  navTitle: "Jack",
 
   // 👇 【新增】导航栏中间的那个后缀/分隔符（默认是 の）
   navSuffix: "の",
@@ -22,7 +22,7 @@ export const siteConfig = {
   useGradient: false,
   themeColors: ["#a18cd1", "#fbc2eb", "#a1c4fd", "#c2e9fb"], // 呼吸流动的颜色组合
 // 修改这里：变成图片数组
-  bgImages: ["/images/bg1.jpg", "/images/bg2.jpg", "/images/bg3.jpg"],
+  bgImages: ["/images/upload_20260814_235244_63e931.jpg", "/images/upload_20260814_235249_b517eb.jpg", "/images/upload_20260814_235253_7ef702.jpg", "/images/upload_20260814_235626_7dc530.jpg", "/images/upload_20260814_235633_6d0230.jpg", "/images/upload_20260814_235639_e5ff54.jpg"],
 
   // 4. 文章默认封面图 (当 Markdown 没写 cover 时显示)
   defaultPostCover: "/images/default-post-cover.jpg",
@@ -32,11 +32,7 @@ export const siteConfig = {
   cloudMusicIds: ["1394167216"],
 
   // 👇 【新增】：本地音乐库 (后台“音乐播放设置”上传后自动生成；src 为 /music/xxx.mp3，lrc 为可选歌词)
-  localMusic: [
-    { title: "匿名的好友", artist: "杨丞琳", cover: "", src: "/music/music_20260814_011236_eb54d2.mp3", lrc: "/music/music_20260814_011236_eb54d2.lrc" },
-    { title: "情歌", artist: "梁静茹", cover: "", src: "/music/music_20260814_010446_66a998.mp3", lrc: "/music/music_20260814_010446_66a998.lrc" },
-    { title: "指纹", artist: "胡歌", cover: "", src: "/music/music_20260814_011236_4799af.mp3", lrc: "/music/music_20260814_011236_4799af.lrc" },
-  ],
+  localMusic: [{"title": "匿名的好友", "artist": "杨丞琳", "cover": "", "src": "/music/music_20260814_011236_eb54d2.mp3", "lrc": "/music/music_20260814_011236_eb54d2.lrc"}, {"title": "情歌", "artist": "梁静茹", "cover": "", "src": "/music/music_20260814_010446_66a998.mp3", "lrc": "/music/music_20260814_010446_66a998.lrc"}, {"title": "指纹", "artist": "胡歌", "cover": "", "src": "/music/music_20260814_011236_4799af.mp3", "lrc": "/music/music_20260814_011236_4799af.lrc"}],
   social: {
     github: "https://github.com/jack86125",
     google: "mailto:0912lwh@gmail.com",
@@ -52,7 +48,7 @@ export const siteConfig = {
 
 
   // 👇 【新增】：全局背景弹幕配置
-  danmakuList: ["在干嘛呢？", "有笨蛋嘛？", "前方高能反应！", "GROMACS 跑起来了吗？", "MD 模拟什么时候才能出图啊", "Graph Neural Networks 炼丹中...", "BUG 修复进度 99%", "今天背单词了吗？", "Tailwind CSS 拯救前端", "写算法中", "睡大觉中", "到底在干嘛？"],
+  danmakuList: ["记得听歌哦~", "今天有没有好好吃饭?", "旅游~旅游~旅游~", "吃!吃!吃!吃!吃!", "今天有没有开心呢?", "发呆ing", "吃什么呢?", "持续学习中~~", "Vibe Coding中!!!!!!", "在干嘛呢？", "有笨蛋嘛？", "前方高能反应！", "BUG 修复进度 99%", "今天背单词了吗？", "睡大觉中", "到底在干嘛？"],
   gitalkConfig: {
     clientID: "",
     clientSecret: "",
@@ -60,10 +56,10 @@ export const siteConfig = {
     owner: "",
     admin: [""],
   },
-  buildDate: "2026-08-13T17:38:47", // 建站日期
+  buildDate: "2026-08-13T17:00:00", // 建站日期
   footerBadges: [{"name": "Next.js 15", "color": "text-sky-500", "svg": "<path d=\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z\"/>"}, {"name": "React 19", "color": "text-cyan-400", "svg": "<path d=\"M12 22.6l-9.8-5.6V5.6L12 0l9.8 5.6v11.4l-9.8 5.6zm-8.2-6.5l8.2 4.7 8.2-4.7V7.5L12 2.8 3.8 7.5v8.6z\"/>"}, {"name": "Tailwind 4", "color": "text-teal-400", "svg": "<path d=\"M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624C13.666,10.618,15.027,12,18.001,12 c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624c1.177,1.194,2.538,2.576,5.512,2.576 c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624C10.337,13.382,8.976,12,6.001,12z\"/>"}],
   icpConfig: {
-    name: "萌ICP备 20260240号",
+    name: "酷ICP备 20040912号",
     link: "https://icp.gov.moe/?keyword=20260240",
   },
   geminiConfig: {
@@ -72,5 +68,5 @@ export const siteConfig = {
     maxOutputTokens: 300,
     temperature: 0.85,
   },
-  friendLinkApplyFormat: "名称：XingHuiSamaの宝藏之地\n简介：今天我也要学习吗\n链接：https://www.xinghuisama.top\n头像：/images/friend-avatar.jpg",
+  friendLinkApplyFormat: "名称：XingHuiSamaの宝藏之地\n简介：今天也要持续学习啊!\n",
 };
