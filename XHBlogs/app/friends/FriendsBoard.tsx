@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import BackButton from '../../components/BackButton';
 import { friendsData } from '../../data/friends';
-import Comments from '../../components/Comments'; // 🌟 引入你的 Gitalk 组件
-import { siteConfig } from '../../siteConfig'; // 🌟 引入刚刚更新的全局配置文件
 
 // Framer Motion 动画变体：交错子元素
 const containerVariants = {
@@ -22,16 +20,36 @@ const itemVariants = {
 };
 
 export default function FriendsBoard() {
-  // 🌟 控制复制按钮的状态
-  const [isCopied, setIsCopied] = useState(false);
+  // 🌟 友链申请表单状态(替代原来的「复制格式 + Gitalk 留言」流程)
+  const [applyForm, setApplyForm] = useState({ name: '', url: '', avatar: '', description: '', website: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [applyResult, setApplyResult] = useState<{ ok: boolean; message: string } | null>(null);
 
-  // 🌟 直接从 siteConfig 读取申请格式
-  const applyFormat = siteConfig.friendLinkApplyFormat;
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(applyFormat);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+  const handleApplySubmit = async () => {
+    if (isSubmitting) return;
+    if (!applyForm.name.trim() || !applyForm.url.trim()) {
+      setApplyResult({ ok: false, message: '名称和链接是必填的哦' });
+      return;
+    }
+    setIsSubmitting(true);
+    setApplyResult(null);
+    try {
+      const res = await fetch('/api/friend-apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(applyForm),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setApplyResult({ ok: true, message: data.message || '申请已送达!' });
+        setApplyForm({ name: '', url: '', avatar: '', description: '', website: '' });
+      } else {
+        setApplyResult({ ok: false, message: data.message || '提交失败,请稍后再试' });
+      }
+    } catch {
+      setApplyResult({ ok: false, message: '网络异常,请稍后再试' });
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -97,7 +115,7 @@ export default function FriendsBoard() {
         ))}
       </motion.div>
 
-      {/* 申请友链引导区 */}
+      {/* 友链申请表单区(替代原「复制格式 + Gitalk 留言」流程,申请直达站长后台) */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -108,62 +126,75 @@ export default function FriendsBoard() {
         <h2 className="text-lg md:text-2xl font-black text-slate-900 dark:text-white mb-2 md:mb-4 tracking-wider">
           ✨ 建立神经连接
         </h2>
-        <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-serif mb-4 md:mb-6">
-          欢迎各位大佬交换友链！请一键复制下方格式，并在底部的 Gitalk 留言板申请：
+        <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-serif mb-6 md:mb-8">
+          欢迎各位大佬交换友链！填写下方表单，站长确认后就会把你的卡片挂上来：
         </p>
 
-        {/* 代码展示框 & 一键复制按钮 */}
-        <div className="relative bg-slate-100/60 dark:bg-slate-900/60 rounded-xl md:rounded-2xl p-4 md:p-5 text-left inline-block w-full max-w-md border border-slate-200/50 dark:border-slate-700/50 group overflow-hidden">
-          <pre className="font-mono text-[10px] md:text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-all pr-8 md:pr-10">
-            {applyFormat}
-          </pre>
-
-          <button
-            onClick={handleCopy}
-            className="absolute top-2 right-2 md:top-3 md:right-3 p-1.5 md:p-2 rounded-lg bg-white/80 dark:bg-slate-800/80 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-500 transition-all duration-300 shadow-sm backdrop-blur-sm"
-            title="一键复制"
-          >
-            {isCopied ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-green-500">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-500 hover:text-white">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-              </svg>
-            )}
-          </button>
+        <div className="space-y-3 md:space-y-4 text-left max-w-md mx-auto">
+          <input
+            type="text"
+            value={applyForm.name}
+            onChange={e => setApplyForm({ ...applyForm, name: e.target.value })}
+            maxLength={30}
+            placeholder="站点名称 (必填)"
+            className="w-full bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          />
+          <input
+            type="text"
+            value={applyForm.url}
+            onChange={e => setApplyForm({ ...applyForm, url: e.target.value })}
+            maxLength={200}
+            placeholder="站点链接 https://... (必填)"
+            className="w-full bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          />
+          <input
+            type="text"
+            value={applyForm.avatar}
+            onChange={e => setApplyForm({ ...applyForm, avatar: e.target.value })}
+            maxLength={300}
+            placeholder="头像链接 https://... (选填)"
+            className="w-full bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          />
+          <textarea
+            rows={2}
+            value={applyForm.description}
+            onChange={e => setApplyForm({ ...applyForm, description: e.target.value })}
+            maxLength={120}
+            placeholder="一句话简介 (选填)"
+            className="w-full bg-white/70 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none resize-none focus:ring-2 focus:ring-indigo-500 transition-all"
+          />
+          {/* 🌟 蜜罐:对真人不可见,机器人填了会被后端静默丢弃 */}
+          <input
+            type="text"
+            value={applyForm.website}
+            onChange={e => setApplyForm({ ...applyForm, website: e.target.value })}
+            tabIndex={-1}
+            autoComplete="off"
+            placeholder="website"
+            className="hidden"
+            aria-hidden="true"
+          />
         </div>
 
         <div className="mt-6 md:mt-8">
-          <a
-            href="#gitalk-container"
-            className="inline-block px-6 py-2.5 md:px-8 md:py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-full text-sm md:text-base font-bold tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30"
+          <button
+            onClick={handleApplySubmit}
+            disabled={isSubmitting}
+            className={`inline-block px-8 py-2.5 md:px-10 md:py-3 rounded-full text-sm md:text-base font-bold tracking-widest transition-all duration-300 shadow-lg ${
+              isSubmitting
+                ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-300 cursor-wait'
+                : 'bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white hover:scale-105 active:scale-95 shadow-indigo-500/30'
+            }`}
           >
-            前往留言区申请 👇
-          </a>
-        </div>
-      </motion.div>
-
-      {/* Gitalk 评论区 */}
-      <motion.div
-        id="gitalk-container"
-        className="mt-12 md:mt-16 scroll-mt-24 px-2 md:px-0"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
-          <span className="w-8 md:w-12 h-[1px] bg-slate-300 dark:bg-slate-700"></span>
-          <h3 className="text-sm md:text-xl font-bold text-slate-800 dark:text-gray-200 tracking-widest uppercase">
-            终端留言板
-          </h3>
-          <span className="w-8 md:w-12 h-[1px] bg-slate-300 dark:bg-slate-700"></span>
+            {isSubmitting ? '正在发送...' : '提交申请 🚀'}
+          </button>
         </div>
 
-        {/* 渲染评论组件 */}
-        <Comments />
+        {applyResult && (
+          <p className={`mt-4 text-xs md:text-sm font-bold ${applyResult.ok ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}`}>
+            {applyResult.ok ? '✅ ' : '⚠️ '}{applyResult.message}
+          </p>
+        )}
       </motion.div>
 
     </div>

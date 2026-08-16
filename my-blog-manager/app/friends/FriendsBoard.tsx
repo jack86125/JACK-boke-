@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BackButton from '../../components/BackButton';
 import { friendsData as initialFriends, Friend } from '../../data/friends';
-import { Plus, Pencil, Trash2, AlertTriangle, Save, Edit3, X, CloudUpload, Sparkles } from 'lucide-react';
+import { Plus, Pencil, Trash2, AlertTriangle, Save, Edit3, X, CloudUpload, Sparkles, Inbox, RefreshCw, Check } from 'lucide-react';
 import { useOperations } from '../../context/OperationContext';
 import { useToast } from '../../components/ToastProvider';
 import FloatingImageTool from '../../components/editor/FloatingImageTool';
-
-// 🌟 新增：引入配置和评论组件
-import Comments from '../../components/Comments';
-import { siteConfig } from '../../siteConfig';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,14 +29,65 @@ export default function FriendsBoard() {
   const [friendModal, setFriendModal] = useState<{ isOpen: boolean; mode: 'add' | 'edit'; data: Partial<Friend> }>({ isOpen: false, mode: 'add', data: {} });
   const [isImgToolOpen, setIsImgToolOpen] = useState(false);
 
-  // 🌟 新增：控制复制按钮的状态和读取配置模板
-  const [isCopied, setIsCopied] = useState(false);
-  const applyFormat = siteConfig.friendLinkApplyFormat;
+  // 🌟 友链申请队列:访客在博客端提交,这里读取并处理(一键添加 / 忽略)
+  const [applications, setApplications] = useState<any[]>([]);
+  const [appsLoading, setAppsLoading] = useState(false);
+  const [appsRefreshing, setAppsRefreshing] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(applyFormat);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+  const fetchApplications = async (silent = false) => {
+    if (silent) setAppsRefreshing(true);
+    else setAppsLoading(true);
+    try {
+      const res = await fetch('/api/friend-applications', { cache: 'no-store' });
+      const data = await res.json();
+      if (data.success) {
+        setApplications(data.applications || []);
+      } else {
+        showToast(`读取申请失败: ${data.message}`, 'error');
+      }
+    } catch {
+      showToast('无法读取友链申请队列', 'error');
+    }
+    setAppsLoading(false);
+    setAppsRefreshing(false);
+  };
+
+  useEffect(() => {
+    fetchApplications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleResolveApplication = async (application: any, action: 'add' | 'ignore') => {
+    if (action === 'add') {
+      const newFriend: Friend = {
+        id: `friend_${Date.now()}`,
+        name: application.name || '新朋友',
+        url: application.url || '',
+        avatar: application.avatar || '/images/bg1.jpg',
+        description: application.description || '这位朋友很神秘，什么都没写。',
+        themeColor: '#6366f1'
+      };
+      const next = [newFriend, ...editableFriends];
+      setEditableFriends(next);
+      syncToQueue(next);
+      showToast(`✅ 已把「${newFriend.name}」加入友链暂存队列`, 'success');
+    }
+    try {
+      const res = await fetch('/api/friend-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ raw: application.raw }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setApplications(prev => prev.filter(a => a.raw !== application.raw));
+        showToast(action === 'add' ? '申请已处理,记得更新本地并推送上线' : '已忽略该申请', 'success');
+      } else {
+        showToast(`移除申请失败: ${data.message}`, 'error');
+      }
+    } catch {
+      showToast('无法连接到申请队列', 'error');
+    }
   };
 
   const syncToQueue = (nextList: Friend[]) => {
@@ -191,71 +238,72 @@ export default function FriendsBoard() {
         ))}
       </motion.div>
 
-      {/* 🌟 新增：申请友链引导区 (与前端组件一致的移动端适配) */}
+      {/* 🌟 友链申请队列:访客在博客友链页提交的申请在这里处理 */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mt-14 md:mt-20 bg-white/40 dark:bg-slate-800/40 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-2xl md:rounded-3xl p-5 md:p-8 max-w-3xl mx-auto text-center shadow-lg md:shadow-xl relative"
+        className="mt-14 md:mt-20 bg-white/40 dark:bg-slate-800/40 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-2xl md:rounded-3xl p-5 md:p-8 max-w-3xl mx-auto shadow-lg md:shadow-xl relative"
       >
-        <h2 className="text-lg md:text-2xl font-black text-slate-900 dark:text-white mb-2 md:mb-4 tracking-wider">
-          ✨ 建立神经连接
-        </h2>
-        <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-serif mb-4 md:mb-6">
-          欢迎各位大佬交换友链！请一键复制下方格式，并在底部的 Gitalk 留言板申请：
-        </p>
-
-        <div className="relative bg-slate-100/60 dark:bg-slate-900/60 rounded-xl md:rounded-2xl p-4 md:p-5 text-left inline-block w-full max-w-md border border-slate-200/50 dark:border-slate-700/50 group overflow-hidden">
-          <pre className="font-mono text-[10px] md:text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-all pr-8 md:pr-10">
-            {applyFormat}
-          </pre>
-
-          <button
-            onClick={handleCopy}
-            className="absolute top-2 right-2 md:top-3 md:right-3 p-1.5 md:p-2 rounded-lg bg-white/80 dark:bg-slate-800/80 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-500 transition-all duration-300 shadow-sm backdrop-blur-sm"
-            title="一键复制"
-          >
-            {isCopied ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-green-500">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-500 hover:text-white">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-              </svg>
+        <div className="flex items-center justify-between mb-2 md:mb-4">
+          <h2 className="text-lg md:text-2xl font-black text-slate-900 dark:text-white tracking-wider flex items-center gap-2">
+            <Inbox className="text-indigo-500" size={22} /> 友链申请
+            {applications.length > 0 && (
+              <span className="text-[10px] md:text-xs bg-red-500 text-white rounded-full px-2 py-0.5 font-black">{applications.length}</span>
             )}
+          </h2>
+          <button
+            onClick={() => fetchApplications(true)}
+            disabled={appsRefreshing}
+            className="p-2 rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-indigo-500 hover:text-white text-slate-500 transition-all"
+            title="刷新申请列表"
+          >
+            <RefreshCw size={16} className={appsRefreshing ? 'animate-spin' : ''} />
           </button>
         </div>
+        <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 mb-4 md:mb-6">
+          访客在博客友链页提交的申请会出现在这里,一键添加后走「更新本地 → 同步 Blog → 推送 GitHub」流程上线。
+        </p>
 
-        <div className="mt-6 md:mt-8">
-          <a
-            href="#gitalk-container"
-            className="inline-block px-6 py-2.5 md:px-8 md:py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-full text-sm md:text-base font-bold tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30"
-          >
-            前往留言区申请 👇
-          </a>
-        </div>
-      </motion.div>
-
-      {/* 🌟 新增：Gitalk 评论区 */}
-      <motion.div
-        id="gitalk-container"
-        className="mt-12 md:mt-16 scroll-mt-24 px-2 md:px-0"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
-          <span className="w-8 md:w-12 h-[1px] bg-slate-300 dark:bg-slate-700"></span>
-          <h3 className="text-sm md:text-xl font-bold text-slate-800 dark:text-gray-200 tracking-widest uppercase">
-            终端留言板
-          </h3>
-          <span className="w-8 md:w-12 h-[1px] bg-slate-300 dark:bg-slate-700"></span>
-        </div>
-
-        <Comments />
+        {appsLoading ? (
+          <p className="text-sm text-slate-400 py-8 font-bold">正在加载申请队列...</p>
+        ) : applications.length === 0 ? (
+          <p className="text-sm text-slate-400 py-8 font-bold">暂无待处理的友链申请 📭</p>
+        ) : (
+          <div className="space-y-3 text-left">
+            {applications.map((application) => (
+              <div key={application.id || application.raw} className="flex flex-col md:flex-row md:items-center gap-3 bg-white/50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-700/60 rounded-2xl p-4">
+                <img
+                  src={application.avatar || '/images/friend-avatar.jpg'}
+                  alt={application.name}
+                  className="w-12 h-12 rounded-full object-cover bg-white shrink-0 self-center md:self-start"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-black text-slate-800 dark:text-white truncate">{application.name}</p>
+                  <a href={application.url} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-500 hover:underline break-all">{application.url}</a>
+                  {application.description && (
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{application.description}</p>
+                  )}
+                </div>
+                <div className="flex gap-2 shrink-0 self-end md:self-center">
+                  <button
+                    onClick={() => handleResolveApplication(application, 'add')}
+                    className="flex items-center gap-1 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black shadow-lg shadow-emerald-500/30 transition-all"
+                  >
+                    <Check size={14} /> 一键添加
+                  </button>
+                  <button
+                    onClick={() => handleResolveApplication(application, 'ignore')}
+                    className="flex items-center gap-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-300 hover:bg-red-500 hover:text-white text-xs font-black transition-all"
+                  >
+                    <X size={14} /> 忽略
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </motion.div>
 
     </div>
