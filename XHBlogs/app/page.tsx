@@ -149,9 +149,12 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 底部数据面板 */}
-              <div className="w-full mt-4"><SiteDashboard/></div>
             </main>
+          </div>
+
+          {/* 底部数据面板:独立更宽的容器(拉长组件),保证署名等一行显示 */}
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-4 relative z-10">
+            <SiteDashboard/>
           </div>
         </PageTransition>
       </div>

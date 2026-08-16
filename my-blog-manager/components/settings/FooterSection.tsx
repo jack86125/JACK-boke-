@@ -97,20 +97,20 @@ export default function FooterSection({ formData, handleUpdate, pushToQueue }: F
 
           <hr className="border-white/20 dark:border-slate-700/30" />
 
-          {/* 2. 备案信息 */}
+          {/* 2. 页脚署名 (原 ICP 备案信息,现用于 CC BY-NC 原作者署名) */}
           <div>
             <h3 className="text-sm font-black text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
-              <Shield size={16} className="text-emerald-500" /> ICP 备案信息
+              <Shield size={16} className="text-emerald-500" /> 页脚署名 (CC BY-NC)
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-1.5 block">备案号 / 显示名称</label>
+                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-1.5 block">显示名称</label>
                 <input
                   type="text"
                   value={icpConfig.name}
                   onChange={(e) => handleUpdate('icpConfig', { ...icpConfig, name: e.target.value })}
                   className="w-full bg-white/60 dark:bg-slate-800/60 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-medium text-slate-700 dark:text-slate-200 border border-white/40 dark:border-slate-700/50"
-                  placeholder="例如: 萌ICP备 20260240号"
+                  placeholder="例如: XinghuiSama"
                 />
               </div>
               <div>
@@ -120,10 +120,11 @@ export default function FooterSection({ formData, handleUpdate, pushToQueue }: F
                   value={icpConfig.link}
                   onChange={(e) => handleUpdate('icpConfig', { ...icpConfig, link: e.target.value })}
                   className="w-full bg-white/60 dark:bg-slate-800/60 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-medium text-slate-700 dark:text-slate-200 border border-white/40 dark:border-slate-700/50"
-                  placeholder="例如: https://icp.gov.moe/..."
+                  placeholder="例如: https://github.com/heiehiehi/XinghuisamaBlogs"
                 />
               </div>
             </div>
+            <p className="text-[10px] text-slate-400 mt-2 ml-1">页脚会显示为 [作者名]采用[CCBY-NC] —— 协议链接固定指向 CC BY-NC 4.0 官网,无需填写。</p>
           </div>
 
           <hr className="border-white/20 dark:border-slate-700/30" />
