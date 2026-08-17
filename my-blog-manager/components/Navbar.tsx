@@ -64,6 +64,7 @@ export default function Navbar() {
     { name: '杂谈', href: '/chatter' },
     { name: '📝 草稿箱', href: '/drafts' },
     { name: '友链', href: '/friends' },
+    { name: '💬 评论', href: '/comments' },
     { name: '关于', href: '/about' },
     { name: '⚙️ 设置', href: '/settings' },
   ];

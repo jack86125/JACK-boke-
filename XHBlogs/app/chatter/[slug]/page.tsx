@@ -280,7 +280,7 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
               </div>
 
               <div className="mt-10 md:mt-12">
-                <Comments />
+                <Comments pageKey={`chatter:${resolvedParams.slug}`} />
               </div>
 
             </div>

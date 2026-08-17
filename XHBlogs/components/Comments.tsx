@@ -1,10 +1,9 @@
 "use client";
 
-// 🌟 评论区已暂时隐藏(2026-08-15)
-// 原因:原 Gitalk 方案从未配置(clientID 等全为空)且访客需 GitHub 账号才能评论。
-// 用户决定先下线评论区,后续接入 Waline/Twikoo 等游客免登录方案时再恢复。
-// 原 Gitalk 实现见 git 历史(提交 3fbb0f4)的 XHBlogs/components/Comments.tsx。
+// 🌟 自建评论系统(Upstash Redis,游客免登录,2026-08-17)
+// 薄包装:文章/杂谈详情页传入 pageKey(如 `post:post_1786728538`),具体逻辑在 CommentSection。
+import CommentSection from './CommentSection';
 
-export default function Comments() {
-  return null;
+export default function Comments({ pageKey }: { pageKey: string }) {
+  return <CommentSection pageKey={pageKey} />;
 }
