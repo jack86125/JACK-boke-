@@ -19,7 +19,8 @@ export const albums: Album[] = [
         "url": "/images/upload_20260814_220235_efb4e0.jpg"
       },
       {
-        "url": "/images/upload_20260814_220227_a5cac8.jpg"
+        "url": "/images/upload_20260814_220227_a5cac8.jpg",
+        "caption": "西湖纵有千般美,无你不过一滩水"
       },
       {
         "url": "/images/upload_20260814_220220_1938f6.jpg"
@@ -32,7 +33,7 @@ export const albums: Album[] = [
   },
   {
     "title": "上海",
-    "description": "感受魔都的繁华",
+    "description": "繁华的魔都,纸醉金迷的上海",
     "cover": "/images/upload_20260814_234329_728bdc.jpg",
     "id": "album_1786722211892",
     "photos": [
@@ -56,7 +57,7 @@ export const albums: Album[] = [
   },
   {
     "title": "南京",
-    "description": "总有一天我会再次回到南京",
+    "description": "总有一天我会再次回到南京,回到金陵",
     "cover": "/images/upload_20260814_231922_8cbba4.jpg",
     "id": "album_1786720614063",
     "photos": [
@@ -112,6 +113,6 @@ export const albums: Album[] = [
       }
     ],
     "date": "2026-08-14",
-    "description": "总要来趟武汉吧"
+    "description": "总要来趟武汉,吃碗热干面吧!"
   }
 ];
