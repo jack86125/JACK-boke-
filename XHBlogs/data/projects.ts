@@ -11,6 +11,16 @@ export type Project = {
 
 export const projectsData: Project[] = [
   {
+    "id": "proj_1787170609450",
+    "name": "企业岗位经验 Skill 生成平台",
+    "githubUrl": "https://github.com/jack86125/shuhuazhisuanmianshi",
+    "description": "自然语言→执行技能→分析结果。可以让业务人员消耗代码创建AI员工能力。\n自然语言生成Skill、完整执行闭环、多岗位场景、技能资产库、模拟兜底（无钥匙/断网/故障演示不中断）、执行期防幻觉约束（数据不足明显标注、禁止编造）。",
+    "icon": "🚀",
+    "tags": [
+      "Next.js"
+    ]
+  },
+  {
     "id": "proj_1786801551198",
     "name": "AI Director",
     "githubUrl": "https://github.com/jack86125/AI-Director",
