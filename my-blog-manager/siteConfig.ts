@@ -32,7 +32,7 @@ export const siteConfig = {
   cloudMusicIds: ["1394167216"],
 
   // 👇 【新增】：本地音乐库 (后台“音乐播放设置”上传后自动生成；src 为 /music/xxx.mp3，lrc 为可选歌词)
-  localMusic: [{"title": "匿名的好友", "artist": "杨丞琳", "cover": "", "src": "/music/music_20260814_011236_eb54d2.mp3", "lrc": "/music/music_20260814_011236_eb54d2.lrc"}, {"title": "情歌", "artist": "梁静茹", "cover": "", "src": "/music/music_20260814_010446_66a998.mp3", "lrc": "/music/music_20260814_010446_66a998.lrc"}, {"title": "指纹", "artist": "胡歌", "cover": "", "src": "/music/music_20260814_011236_4799af.mp3", "lrc": "/music/music_20260814_011236_4799af.lrc"}],
+  localMusic: [{"title": "匿名的好友", "artist": "杨丞琳", "cover": "/images/cover-anonymous-friend.jpg", "src": "/music/music_20260814_011236_eb54d2.mp3", "lrc": "/music/music_20260814_011236_eb54d2.lrc"}, {"title": "情歌", "artist": "梁静茹", "cover": "/images/cover-love-song.jpg", "src": "/music/music_20260814_010446_66a998.mp3", "lrc": "/music/music_20260814_010446_66a998.lrc"}, {"title": "指纹", "artist": "胡歌", "cover": "/images/cover-fingerprint.jpg", "src": "/music/music_20260814_011236_4799af.mp3", "lrc": "/music/music_20260814_011236_4799af.lrc"}],
   social: {
     github: "https://github.com/jack86125",
     google: "mailto:0912lwh@gmail.com",
