@@ -116,6 +116,9 @@ input[type="number"] {
   cursor: pointer;
   accent-color: #6366f1;
 }
+/* 🌟 首行缩进:与发布端(XHBlogs 文章/杂谈页)一致的段落缩进,2em = 恰好 2 个汉字宽 */
+.editor-content-area > p { text-indent: 2em !important; }
+.editor-content-area > p:has(> img) { text-indent: 0 !important; }
 /* 自定义滚动条美化 */
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.2); border-radius: 10px; }
