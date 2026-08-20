@@ -3,6 +3,14 @@ export interface Friend { id: string; name: string; url: string; description: st
 
 export const friendsData: Friend[] = [
   {
+    "id": "friend_1787223176980",
+    "name": "桃之夭夭",
+    "url": "https://taozhiyy.top",
+    "avatar": "https://taozhiyy.top/cos/1.png",
+    "description": "桃之夭夭的小屋",
+    "themeColor": "#6366f1"
+  },
+  {
     "id": "friend_1787150669676",
     "name": "绘星里",
     "url": "https://blog.storia.ren/",
