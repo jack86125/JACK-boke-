@@ -3,6 +3,30 @@ export interface Friend { id: string; name: string; url: string; description: st
 
 export const friendsData: Friend[] = [
   {
+    "id": "friend_1787320404911",
+    "name": "冷月笙寒的小窝",
+    "url": "https://lygalaxy.cn/",
+    "avatar": "https://lygalaxy.cn/uploads/20260128_200240_6979fae094c7b.jpg",
+    "description": "发现巷子里的那颗星星(技术与生活分享)",
+    "themeColor": "#6366f1"
+  },
+  {
+    "id": "friend_1787320403907",
+    "name": "安泽の温馨小窝",
+    "url": "https://anze.love",
+    "avatar": "https://anze.love/wp-content/uploads/2026/03/cropped-anze.jpg",
+    "description": "愿得一人心.",
+    "themeColor": "#6366f1"
+  },
+  {
+    "id": "friend_1787320402620",
+    "name": "XingHuiSamaの宝藏之地",
+    "url": "https://www.xinghuisama.top",
+    "avatar": "https://bu.dusays.com/2026/03/24/69c1e38a",
+    "description": "今天我也要学习吗?",
+    "themeColor": "#6366f1"
+  },
+  {
     "id": "friend_1787223176980",
     "name": "桃之夭夭",
     "url": "https://taozhiyy.top",
