@@ -15,7 +15,7 @@ description: ''
 
 **🧑‍💻 开发方向**
 
-* **Agent开发:RAG、Agent等**。
+* **Agent开发:RAG、Agent、WorkFlow、AI应用等**。
 * **Vibe Coding:前端网站、管理系统、小程序等**。
 
 **✈️ 旅游足迹**
