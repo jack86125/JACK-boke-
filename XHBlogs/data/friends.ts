@@ -3,6 +3,14 @@ export interface Friend { id: string; name: string; url: string; description: st
 
 export const friendsData: Friend[] = [
   {
+    "id": "friend_1787768136983",
+    "name": "YuJing的记忆终端",
+    "url": "https://www.yujingblog.top/",
+    "avatar": "https://www.yujingblog.top/assets/home/avatar.webp",
+    "description": "不怪天气不好，是我心事太多。",
+    "themeColor": "#6366f1"
+  },
+  {
     "id": "friend_1787320404911",
     "name": "冷月笙寒的小窝",
     "url": "https://lygalaxy.cn/",
