@@ -363,7 +363,7 @@ if __name__ == "__main__":
 
         api = WindowAPI()
         window = webview.create_window(
-            title='星辉云端·控制台',
+            title='Jackの宝藏之地控制台',
             url=window_url,
             width=1440, height=900, min_size=(1024, 768),
             background_color='#0f172a', resizable=True, frameless=True, easy_drag=False, js_api=api

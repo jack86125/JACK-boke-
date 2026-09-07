@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # 强制切换到脚本所在目录
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-    print("🌟 --- 星辉云端控制台 · 自动部署系统 --- 🌟")
+    print("🌟 --- Jackの宝藏之地控制台 · 自动部署系统 --- 🌟")
 
     # 先查前端，再查后端
     if check_node_environment() and check_python_environment():
