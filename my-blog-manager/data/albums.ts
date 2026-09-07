@@ -4,6 +4,33 @@ export interface Album { id: string; title: string; description: string; cover: 
 
 export const albums: Album[] = [
   {
+    "title": "武汉",
+    "cover": "/images/upload_20260814_232945_d096c9.jpg",
+    "id": "album_1786721388177",
+    "photos": [
+      {
+        "url": "/images/upload_20260814_233050_ed848d.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_233043_36fa35.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_233036_77b626.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_233029_d19c90.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_233022_203bd1.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_233009_1d7b8d.jpg"
+      }
+    ],
+    "date": "2026-08-14",
+    "description": "总要来趟武汉,吃碗热干面吧!"
+  },
+  {
     "title": "南京",
     "description": "总有一天我会再次回到南京,回到金陵",
     "cover": "/images/upload_20260814_231922_8cbba4.jpg",
@@ -87,32 +114,5 @@ export const albums: Album[] = [
       }
     ],
     "date": "2026-08-14"
-  },
-  {
-    "title": "武汉",
-    "cover": "/images/upload_20260814_232945_d096c9.jpg",
-    "id": "album_1786721388177",
-    "photos": [
-      {
-        "url": "/images/upload_20260814_233050_ed848d.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_233043_36fa35.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_233036_77b626.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_233029_d19c90.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_233022_203bd1.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_233009_1d7b8d.jpg"
-      }
-    ],
-    "date": "2026-08-14",
-    "description": "总要来趟武汉,吃碗热干面吧!"
   }
 ];
