@@ -4,6 +4,34 @@ export interface Album { id: string; title: string; description: string; cover: 
 
 export const albums: Album[] = [
   {
+    "title": "杭州之旅",
+    "description": "上有天堂,下有余杭",
+    "cover": "/images/upload_20260814_220121_d0519f.jpg",
+    "id": "album_1786716085961",
+    "photos": [
+      {
+        "url": "/images/upload_20260814_220250_483cba.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_220243_fa929f.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_220235_efb4e0.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_220227_a5cac8.jpg",
+        "caption": "西湖纵有千般美,无你不过一滩水"
+      },
+      {
+        "url": "/images/upload_20260814_220220_1938f6.jpg"
+      },
+      {
+        "url": "/images/upload_20260814_220136_d9e12c.jpg"
+      }
+    ],
+    "date": "2026-08-14"
+  },
+  {
     "title": "武汉",
     "cover": "/images/upload_20260814_232945_d096c9.jpg",
     "id": "album_1786721388177",
@@ -59,34 +87,6 @@ export const albums: Album[] = [
       },
       {
         "url": "/images/upload_20260814_231703_c3b276.jpg"
-      }
-    ],
-    "date": "2026-08-14"
-  },
-  {
-    "title": "杭州之旅",
-    "description": "上有天堂,下有余杭",
-    "cover": "/images/upload_20260814_220121_d0519f.jpg",
-    "id": "album_1786716085961",
-    "photos": [
-      {
-        "url": "/images/upload_20260814_220250_483cba.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_220243_fa929f.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_220235_efb4e0.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_220227_a5cac8.jpg",
-        "caption": "西湖纵有千般美,无你不过一滩水"
-      },
-      {
-        "url": "/images/upload_20260814_220220_1938f6.jpg"
-      },
-      {
-        "url": "/images/upload_20260814_220136_d9e12c.jpg"
       }
     ],
     "date": "2026-08-14"
